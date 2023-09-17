@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mybot">
+
+    <!--  xacro properties -->
+    <xacro:property name="PI" value="3.14159" />
+    <xacro:property name="effort" value="30.0" />
+    <xacro:property name="velocity" value="10.0" />
+
+
+    <!-- link world-->
+    <link name="world" />
+
+    <!-- base link -->
+    <link name="base_link">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to base_link-->
+            <origin xyz="-0.5 -0.5 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/basement.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- fixed joint btw world and base link -->
+    <joint name="virtual_joint" type="fixed">
+        <parent link="world" />
+        <child link="base_link" />
+        <!-- this will define the transformation matrix btw world and base_link -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+    <!-- base_plate link -->
+    <link name="base_plate">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to base_plate-->
+            <origin xyz="-0.39 -0.39 -0.56" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/base_plate.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- joint btw base_plate and base_link -->
+    <joint name="joint_1" type="revolute">
+        <parent link="base_link" />
+        <child link="base_plate" />
+        <!-- this will define the transformation matrix btw base_link and base_plate -->
+        <origin xyz="0.0 0.0 0.307" rpy="0.0 0.0 0.0" />
+        <axis xyz="0.0 0.0 1.0" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
+    </joint>
+
+    <!-- forward drive arm link -->
+    <link name="forward_drive_arm">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to forward_drive_arm-->
+            <origin xyz="0.19 0.06 -0.08" rpy="0.0 -${PI/2} ${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- joint btw the base_plate link and forward_drive_arm link -->
+    <joint name="joint_2" type="revolute">
+        <!-- this will define the transformation matrix btw base_plate link and forward_drive_arm
+        link -->
+        <origin xyz="-0.02 0.0 0.35" rpy="0.0 0.0 0.0" />
+        <parent link="base_plate" />
+        <child link="forward_drive_arm" />
+        <axis xyz="1.0 0.0 0.0" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
+    </joint>
+
+    <!-- horizontal arm link -->
+    <link name="horizontal_arm">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to horizontal_arm-->
+            <origin xyz="-0.03 -0.04 -0.06" rpy="${PI/2} 0.0 ${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/horizontal_arm.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- joint btw the forward_drive_arm link and the horizontal_arm link -->
+    <joint name="joint_3" type="revolute">
+        <!-- this will define the transformation matrix btw forward_drive_arm link and
+        horizontal_arm
+        link -->
+        <origin xyz="0.0 0.0 0.80" rpy="0.0 0.0 0.0" />
+        <parent link="forward_drive_arm" />
+        <child link="horizontal_arm" />
+        <axis xyz="1.0 0.0 0.0" />
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
+    </joint>
+
+    <!-- claw_support link -->
+    <link name="claw_support">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to claw_support-->
+            <origin xyz="0.0 -0.05 -0.15" rpy="0.0 0.0 ${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/claw_support.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- fixed joint btw the the horizontal_arm link  and claw_support link -->
+    <joint name="horizontal_arm_to_claw_support" type="fixed">
+        <!-- this will define the transformation matrix btw horizontal_arm and claw_support link -->
+        <origin xyz="0.0 0.82 0.0" rpy="0.0 0.0 0.0" />
+        <parent link="horizontal_arm" />
+        <child link="claw_support" />
+    </joint>
+
+    <!-- gripper right link -->
+    <link name="gripper_right">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to gripper_right-->
+            <origin xyz="-0.1 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/right_finger.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- joint btw the claw_support link and gripper_right -->
+    <joint name="joint_4" type="revolute">
+        <!-- this will define the transformation matrix btw horizontal_arm and claw_support link -->
+        <origin xyz="-0.04 0.13 -0.1" rpy="0.0 0.0 0.0" />
+        <parent link="claw_support" />
+        <child link="gripper_right" />
+        <axis xyz="0.0 0.0 1.0" />
+        <limit lower="-${PI/2}" upper="0.0" effort="${effort}" velocity="${velocity}" />
+    </joint>
+
+    <!-- gripper left link -->
+    <link name="gripper_left">
+        <visual>
+            <!-- this will define the position and orientation of mesh w.r.t to gripper_left -->
+            <origin xyz="-0.04 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/left_finger.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+    <!-- joint btw the claw_support link and gripper_right -->
+    <joint name="joint_5" type="revolute">
+        <!-- this will define the transformation matrix btw horizontal_arm and claw_support link -->
+        <origin xyz="-0.22 0.13 -0.1" rpy="0.0 0.0 0.0" />
+        <parent link="claw_support" />
+        <child link="gripper_left" />
+        <axis xyz="0.0 0.0 1.0" />
+        <limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
+        <!-- as both left and right finger has to move together, joint_5 should mimic the joint_4
+        but in opposite direction-->
+        <mimic joint="joint_4" multiplier="-1" />
+    </joint>
+
+</robot>
