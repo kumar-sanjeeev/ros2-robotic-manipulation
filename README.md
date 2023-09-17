@@ -19,3 +19,6 @@ docker build -t <desired_docker_image_name> .
 # launch the docker container using docker-run 
 docker-run --name <conatiner_name> --mwd -it -e DOCKER_UID=$(id -u) -e DOCKER_GID=$(id -g) -e DOCKER_USER=$(id -un) --no-gpu --no-rm <desired_docker_image_name>:latest
 ```
+
+## Info about ROS2 pkgs of mybot
+- [x] [mybot_description: This package provides acomprehensive description of the mybot robot ](mybot_description)
