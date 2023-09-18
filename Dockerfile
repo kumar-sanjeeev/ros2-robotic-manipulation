@@ -1,5 +1,5 @@
-# Base Image from ika/rwth repo Ref: https://github.com/ika-rwth-aachen/docker-ros-ml-images/tree/main
-FROM rwthika/ros2:humble-desktop-full
+# Base Image from athackst/dockerfiles repo Ref: https://github.com/athackst/dockerfiles/blob/main/ros2/humble.Dockerfile
+FROM althack/ros2:humble-gazebo
 
 # Update the package list and install required ros2 humble pkgs
 RUN apt-get update && apt-get install -y \
@@ -12,4 +12,3 @@ RUN apt-get update && apt-get install -y \
     ros-humble-moveit \
     ros-humble-urdf-tutorial
 
-# USER root
