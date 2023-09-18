@@ -21,4 +21,4 @@ docker-run --name <conatiner_name> --mwd -it -e DOCKER_UID=$(id -u) -e DOCKER_GI
 ```
 
 ## Info about ROS2 pkgs of mybot
-- [x] [mybot_description: This package provides acomprehensive description of the mybot robot ](mybot_description)
+- [ ] **ROS2 PKG** : [mybot_description](mybot_description):: This package provides a comprehensive description of the mybot robot.
