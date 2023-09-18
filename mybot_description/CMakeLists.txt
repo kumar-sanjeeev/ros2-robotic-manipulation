@@ -11,7 +11,7 @@ find_package(ament_cmake REQUIRED)
 # edited by me: add install instruction so that mentioned
 # packages are recognised by ros during building of packages
 install(
-  DIRECTORY meshes urdf
+  DIRECTORY meshes urdf launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
