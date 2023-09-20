@@ -1,21 +1,35 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mybot">
 
+    <!-- Include xacro File
+    <xacro:include filename="$(find mybot_description)/urdf/mybot_gazebo.xacro" />
+    <xacro:include filename="$(find mybot_description)/urdf/mybot_ros2_control.xacro" /> -->
+
+
     <!--  xacro properties -->
     <xacro:property name="PI" value="3.14159" />
     <xacro:property name="effort" value="30.0" />
     <xacro:property name="velocity" value="10.0" />
 
-    <!-- create intertia macro -->
+    <!-- create inertia macro -->
     <xacro:macro name="default_inertia" params="mass">
         <inertial>
             <mass value="${mass}" />
-            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+            <inertia ixx="1.0" ixy="0.0"
                 iyy="1.0" iyz="0.0"
-                izz="1.0" />
+                izz="1.0" ixz="0.0" />
         </inertial>
     </xacro:macro>
 
+    <!-- <xacro:macro name="default_transmission" params="joint_no">
+        <transmission name="transmission_${joint_no}">
+            <plugin>transmission_interface/SimpleTransmission</plugin>
+            <joint name="joint_${joint_no}" role="joint1">
+                <mechanicalReduction>1.0</mechanicalReduction>
+            </joint>
+            <actuator name="motor_${joint_no}" role="actuator1" />
+        </transmission>
+    </xacro:macro> -->
 
     <!-- link world-->
     <link name="world" />
@@ -32,8 +46,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/basement.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="-0.5 -0.5 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/basement.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- fixed joint btw world and base link -->
@@ -56,8 +73,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/base_plate.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="-0.39 -0.39 -0.56" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/base_plate.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- joint btw base_plate and base_link -->
@@ -82,8 +102,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="0.19 0.06 -0.08" rpy="0.0 -${PI/2} ${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- joint btw the base_plate link and forward_drive_arm link -->
@@ -109,8 +132,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/horizontal_arm.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="-0.03 -0.04 -0.06" rpy="${PI/2} 0.0 ${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/horizontal_arm.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- joint btw the forward_drive_arm link and the horizontal_arm link -->
@@ -137,8 +163,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/claw_support.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="0.0 -0.05 -0.15" rpy="0.0 0.0 ${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/claw_support.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- fixed joint btw the the horizontal_arm link  and claw_support link -->
@@ -161,8 +190,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/right_finger.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="-0.1 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/right_finger.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- joint btw the claw_support link and gripper_right -->
@@ -187,8 +219,11 @@
             </geometry>
         </visual>
         <collision>
-            <mesh filename="package://mybot_description/meshes/left_finger.STL"
-                scale="0.01 0.01 0.01" />
+            <origin xyz="-0.04 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/left_finger.STL"
+                    scale="0.01 0.01 0.01" />
+            </geometry>
         </collision>
     </link>
     <!-- joint btw the claw_support link and gripper_right -->
@@ -203,5 +238,11 @@
         but in opposite direction-->
         <mimic joint="joint_4" multiplier="-1" />
     </joint>
+
+    <!-- added transmission to movable joints for gazebo/physics simulation
+    <xacro:default_transmission joint_no="1" />
+    <xacro:default_transmission joint_no="2" />
+    <xacro:default_transmission joint_no="3" />
+    <xacro:default_transmission joint_no="4" /> -->
 
 </robot>
