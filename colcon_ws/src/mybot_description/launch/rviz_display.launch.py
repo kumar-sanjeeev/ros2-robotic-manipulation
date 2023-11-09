@@ -8,7 +8,7 @@ from launch.substitutions import Command, LaunchConfiguration
 
 
 def generate_launch_description():
-    # instantiate the argument for the launch file
+    # declare the argument for the launch file
     model_arg = DeclareLaunchArgument(
         name="model", 
         default_value=os.path.join(get_package_share_directory("mybot_description"), "urdf", "mybot.urdf.xacro"),
@@ -20,20 +20,22 @@ def generate_launch_description():
     robot_description = ParameterValue(Command(["xacro ", LaunchConfiguration("model")]))
 
     # start the robot state publisher node, to publish robot model over the topic
-    robot_state_publisher = Node(
+    robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description }]
+        parameters=[{"robot_description": robot_description }],
+        output="screen"
     )
 
     # start the joint state publisher gui node to move the robot joints
-    joint_state_publisher = Node(
+    joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",
-        executable="joint_state_publisher_gui"
+        executable="joint_state_publisher_gui",
+        output="screen"
     )
 
     # start the rviz node to visulaize the robot
-    rviz = Node(
+    rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         output="screen",
@@ -42,7 +44,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         model_arg,
-        robot_state_publisher,
-        joint_state_publisher, 
-        rviz    
+        robot_state_publisher_node,
+        joint_state_publisher_node, 
+        rviz_node
     ])

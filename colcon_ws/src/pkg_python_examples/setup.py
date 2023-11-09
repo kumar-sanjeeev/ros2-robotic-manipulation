@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'simple_publisher = pkg_python_examples.simple_publisher:main',
-            'simple_subscriber = pkg_python_examples.simple_subscriber:main'
+            'simple_subscriber = pkg_python_examples.simple_subscriber:main',
+            'simple_parameter = pkg_python_examples.simple_parameters:main',
         ],
     },
 )

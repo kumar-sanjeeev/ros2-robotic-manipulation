@@ -1,248 +1,254 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mybot">
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_bot">
+    <!-- Useful Xacro Properties -->
+    <xacro:property name="PI" value="3.14159"/>
+    <xacro:property name="effort" value="30"/>
+    <xacro:property name="velocity" value="10.0"/>
 
-    <!-- Include xacro File
-    <xacro:include filename="$(find mybot_description)/urdf/mybot_gazebo.xacro" />
-    <xacro:include filename="$(find mybot_description)/urdf/mybot_ros2_control.xacro" /> -->
-
-
-    <!--  xacro properties -->
-    <xacro:property name="PI" value="3.14159" />
-    <xacro:property name="effort" value="30.0" />
-    <xacro:property name="velocity" value="10.0" />
-
-    <!-- create inertia macro -->
+    <!-- Useful Xacro Macro -->
     <xacro:macro name="default_inertia" params="mass">
         <inertial>
-            <mass value="${mass}" />
-            <inertia ixx="1.0" ixy="0.0"
-                iyy="1.0" iyz="0.0"
-                izz="1.0" ixz="0.0" />
+            <mass value="${mass}"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
         </inertial>
     </xacro:macro>
 
-    <!-- <xacro:macro name="default_transmission" params="joint_no">
-        <transmission name="transmission_${joint_no}">
-            <plugin>transmission_interface/SimpleTransmission</plugin>
-            <joint name="joint_${joint_no}" role="joint1">
-                <mechanicalReduction>1.0</mechanicalReduction>
-            </joint>
-            <actuator name="motor_${joint_no}" role="actuator1" />
-        </transmission>
-    </xacro:macro> -->
-
-    <!-- link world-->
-    <link name="world" />
+    <!--  Links  -->
+    <!-- Reference Link -->
+    <link name="world">
+    </link>
 
     <!-- base link -->
     <link name="base_link">
-        <xacro:default_inertia mass="1.0" />
+        <xacro:default_inertia mass="1.0"/>    
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to base_link-->
-            <origin xyz="-0.5 -0.5 0.0" rpy="0.0 0.0 0.0" />
+            <!-- this will define the position and orientation of mesh w.r.t link frame -->
+            <origin xyz="-0.5 -0.5 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/basement.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="-0.5 -0.5 0.0" rpy="0.0 0.0 0.0" />
+            <origin xyz="-0.5 -0.5 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/basement.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/basement.STL" scale="0.01 0.01 0.01"/> 
             </geometry>
         </collision>
     </link>
-    <!-- fixed joint btw world and base link -->
-    <joint name="virtual_joint" type="fixed">
-        <parent link="world" />
-        <child link="base_link" />
-        <!-- this will define the transformation matrix btw world and base_link -->
-        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-    </joint>
 
-    <!-- base_plate link -->
+    <!-- base plate link -->
     <link name="base_plate">
-        <xacro:default_inertia mass="0.1" />
+        <xacro:default_inertia mass="0.1"/>  
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to base_plate-->
-            <origin xyz="-0.39 -0.39 -0.56" rpy="0.0 0.0 0.0" />
+            <origin xyz="-0.39 -0.39 -0.56" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/base_plate.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="-0.39 -0.39 -0.56" rpy="0.0 0.0 0.0" />
+            <origin xyz="-0.39 -0.39 -0.56" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/base_plate.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </collision>
     </link>
-    <!-- joint btw base_plate and base_link -->
-    <joint name="joint_1" type="revolute">
-        <parent link="base_link" />
-        <child link="base_plate" />
-        <!-- this will define the transformation matrix btw base_link and base_plate -->
-        <origin xyz="0.0 0.0 0.307" rpy="0.0 0.0 0.0" />
-        <axis xyz="0.0 0.0 1.0" />
-        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
-    </joint>
 
     <!-- forward drive arm link -->
     <link name="forward_drive_arm">
-        <xacro:default_inertia mass="0.1" />
+        <xacro:default_inertia mass="0.1"/>  
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to forward_drive_arm-->
-            <origin xyz="0.19 0.06 -0.08" rpy="0.0 -${PI/2} ${PI/2}" />
+            <origin xyz="0.19 0.06 -0.08" rpy="0.0 -${PI/2} ${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="0.19 0.06 -0.08" rpy="0.0 -${PI/2} ${PI/2}" />
+            <origin xyz="0.19 0.06 -0.08" rpy="0.0 -${PI/2} ${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL"
-                    scale="0.01 0.01 0.01" />
-            </geometry>
+                <mesh filename="package://mybot_description/meshes/forward_drive_arm.STL" scale="0.01 0.01 0.01"/>
+            </geometry>        
         </collision>
     </link>
-    <!-- joint btw the base_plate link and forward_drive_arm link -->
-    <joint name="joint_2" type="revolute">
-        <!-- this will define the transformation matrix btw base_plate link and forward_drive_arm
-        link -->
-        <origin xyz="-0.02 0.0 0.35" rpy="0.0 0.0 0.0" />
-        <parent link="base_plate" />
-        <child link="forward_drive_arm" />
-        <axis xyz="1.0 0.0 0.0" />
-        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
-    </joint>
 
     <!-- horizontal arm link -->
     <link name="horizontal_arm">
-        <xacro:default_inertia mass="0.1" />
+        <xacro:default_inertia mass="0.1"/>  
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to horizontal_arm-->
-            <origin xyz="-0.03 -0.04 -0.06" rpy="${PI/2} 0.0 ${PI/2}" />
+            <origin xyz="-0.03 -0.4 -0.06" rpy="${PI/2} 0.0 ${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/horizontal_arm.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/horizontal_arm.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="-0.03 -0.04 -0.06" rpy="${PI/2} 0.0 ${PI/2}" />
+            <origin xyz="-0.03 -0.4 -0.06" rpy="${PI/2} 0.0 ${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/horizontal_arm.STL"
-                    scale="0.01 0.01 0.01" />
-            </geometry>
+                <mesh filename="package://mybot_description/meshes/horizontal_arm.STL" scale="0.01 0.01 0.01"/>
+            </geometry>        
         </collision>
     </link>
-    <!-- joint btw the forward_drive_arm link and the horizontal_arm link -->
-    <joint name="joint_3" type="revolute">
-        <!-- this will define the transformation matrix btw forward_drive_arm link and
-        horizontal_arm
-        link -->
-        <origin xyz="0.0 0.0 0.80" rpy="0.0 0.0 0.0" />
-        <parent link="forward_drive_arm" />
-        <child link="horizontal_arm" />
-        <axis xyz="1.0 0.0 0.0" />
-        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
-    </joint>
 
-    <!-- claw_support link -->
+    <!-- claw support link -->
     <link name="claw_support">
-        <xacro:default_inertia mass="0.05" />
+        <xacro:default_inertia mass="0.05"/>  
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to claw_support-->
-            <origin xyz="0.0 -0.05 -0.15" rpy="0.0 0.0 ${PI/2}" />
+            <origin xyz="0.0 -0.05 -0.15" rpy="0.0 0.0 ${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/claw_support.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/claw_support.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="0.0 -0.05 -0.15" rpy="0.0 0.0 ${PI/2}" />
+            <origin xyz="0.0 -0.05 -0.15" rpy="0.0 0.0 ${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/claw_support.STL"
-                    scale="0.01 0.01 0.01" />
-            </geometry>
+                <mesh filename="package://mybot_description/meshes/claw_support.STL" scale="0.01 0.01 0.01"/>
+            </geometry>        
         </collision>
     </link>
-    <!-- fixed joint btw the the horizontal_arm link  and claw_support link -->
-    <joint name="horizontal_arm_to_claw_support" type="fixed">
-        <!-- this will define the transformation matrix btw horizontal_arm and claw_support link -->
-        <origin xyz="0.0 0.82 0.0" rpy="0.0 0.0 0.0" />
-        <parent link="horizontal_arm" />
-        <child link="claw_support" />
-    </joint>
 
     <!-- gripper right link -->
     <link name="gripper_right">
-        <xacro:default_inertia mass="0.01" />
+        <xacro:default_inertia mass="0.01"/>  
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to gripper_right-->
-            <origin xyz="-0.1 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <origin xyz="-0.1 0.5 -0.1" rpy="0.0 0.0 -${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/right_finger.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/right_finger.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="-0.1 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <origin xyz="-0.1 0.5 -0.1" rpy="0.0 0.0 -${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/right_finger.STL"
-                    scale="0.01 0.01 0.01" />
-            </geometry>
+                <mesh filename="package://mybot_description/meshes/right_finger.STL" scale="0.01 0.01 0.01"/>
+            </geometry>        
         </collision>
     </link>
-    <!-- joint btw the claw_support link and gripper_right -->
-    <joint name="joint_4" type="revolute">
-        <!-- this will define the transformation matrix btw horizontal_arm and claw_support link -->
-        <origin xyz="-0.04 0.13 -0.1" rpy="0.0 0.0 0.0" />
-        <parent link="claw_support" />
-        <child link="gripper_right" />
-        <axis xyz="0.0 0.0 1.0" />
-        <limit lower="-${PI/2}" upper="0.0" effort="${effort}" velocity="${velocity}" />
-    </joint>
 
     <!-- gripper left link -->
     <link name="gripper_left">
-        <xacro:default_inertia mass="0.01" />
+        <xacro:default_inertia mass="0.01"/>  
         <visual>
-            <!-- this will define the position and orientation of mesh w.r.t to gripper_left -->
-            <origin xyz="-0.04 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <origin xyz="-0.04 0.5 -0.1" rpy="0.0 0.0 -${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/left_finger.STL"
-                    scale="0.01 0.01 0.01" />
+                <mesh filename="package://mybot_description/meshes/left_finger.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
         <collision>
-            <origin xyz="-0.04 0.5 -0.1" rpy="0.0 0.0 -${PI/2}" />
+            <origin xyz="-0.04 0.5 -0.1" rpy="0.0 0.0 -${PI/2}"/>
             <geometry>
-                <mesh filename="package://mybot_description/meshes/left_finger.STL"
-                    scale="0.01 0.01 0.01" />
-            </geometry>
+                <mesh filename="package://mybot_description/meshes/left_finger.STL" scale="0.01 0.01 0.01"/>
+            </geometry>        
         </collision>
     </link>
-    <!-- joint btw the claw_support link and gripper_right -->
-    <joint name="joint_5" type="revolute">
-        <!-- this will define the transformation matrix btw horizontal_arm and claw_support link -->
-        <origin xyz="-0.22 0.13 -0.1" rpy="0.0 0.0 0.0" />
-        <parent link="claw_support" />
-        <child link="gripper_left" />
-        <axis xyz="0.0 0.0 1.0" />
-        <limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}" />
-        <!-- as both left and right finger has to move together, joint_5 should mimic the joint_4
-        but in opposite direction-->
-        <mimic joint="joint_4" multiplier="-1" />
+
+    <!-- rgb camera link -->
+    <link name="rgb_camera">
+        <xacro:default_inertia mass="0.001"/>  
+        <visual>
+            <origin xyz="-0.05 0.125 0.14" rpy="-${PI/2} 0.0 -${PI/2}"/>
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="-0.05 0.125 0.14" rpy="-${PI/2} 0.0 -${PI/2}"/>
+            <geometry>
+                <mesh filename="package://mybot_description/meshes/pi_camera.STL" scale="0.01 0.01 0.01"/>
+            </geometry>        
+        </collision>
+    </link>
+
+    <!-- Joints -->
+    <joint name="virtual_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="world"/>
+        <child link="base_link"/>
     </joint>
 
-    <!-- added transmission to movable joints for gazebo/physics simulation
-    <xacro:default_transmission joint_no="1" />
-    <xacro:default_transmission joint_no="2" />
-    <xacro:default_transmission joint_no="3" />
-    <xacro:default_transmission joint_no="4" /> -->
 
+    <joint name="joint_1" type="revolute">
+        <origin xyz="0.0 0.0 0.307" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="base_plate"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+
+
+    <joint name="joint_2" type="revolute">
+        <origin xyz="-0.02 0.0 0.350" rpy="0.0 0.0 0.0"/>
+        <parent link="base_plate"/>
+        <child link="forward_drive_arm"/>
+        <axis xyz="1.0 0.0 0.0"/>
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+
+
+    <joint name="joint_3" type="revolute">
+        <origin xyz="0.0 0.0 0.800" rpy="0.0 0.0 0.0"/>
+        <parent link="forward_drive_arm"/>
+        <child link="horizontal_arm"/>
+        <axis xyz="1.0 0.0 0.0"/>
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+
+
+    <joint name="horinzontal_arm_to_claw_support " type="fixed">
+        <origin xyz="0.0 0.82 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="horizontal_arm"/>
+        <child link="claw_support"/>
+    </joint>
+
+
+    <joint name="joint_4" type="revolute">
+        <origin xyz="-0.04 0.13 -0.100" rpy="0.0 0.0 0.0"/>
+        <parent link="claw_support"/>
+        <child link="gripper_right"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="-${PI/2}" upper="0.0" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+
+
+    <joint name="joint_5" type="revolute">
+        <origin xyz="-0.22 0.13 -0.100" rpy="0.0 0.0 0.0"/>
+        <parent link="claw_support"/>
+        <child link="gripper_left"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <mimic joint="joint_4" multiplier="-1"/>
+        <limit lower="0.0" upper="${PI/2}" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+
+
+    <joint name="rgb_camera_joint" type="fixed">
+        <origin xyz="0.0 0.45 0.2" rpy="0.0 -0.5 1.57"/>
+        <parent link="base_link"/>
+        <child link="rgb_camera"/>
+    </joint>
+
+    <!-- Gazebo Tag -->
+    <gazebo reference="rgb_camera">
+        <sensor type="camera" name="rgb_camera">
+            <always_on>true</always_on>
+            <update_rate>30.0</update_rate>
+            <camera name="rgb_camera">
+                <horizontal_fov>1.15</horizontal_fov>
+                <vertical_fov>0.71</vertical_fov>
+                <image>
+                    <width>2304</width>
+                    <height>1296</height>
+                    <format>R8G8B8</format>
+                </image>
+                <distortion>
+                    <k1>0.0</k1>
+                    <k2>0.0</k2>
+                    <k3>0.0</k3>
+                    <p1>0.0</p1>
+                    <p2>0.0</p2>
+                    <center>0.5 0.5</center>
+                </distortion>
+            </camera>
+            <plugin name="plugin_name" filename="libgazebo_ros_camera.so">
+                <camera_name>rgb_camera</camera_name>
+                <frame_name>rgb_camera</frame_name>
+                <hack_baseline>0.2</hack_baseline>
+            </plugin>
+        </sensor>
+    </gazebo>
 </robot>

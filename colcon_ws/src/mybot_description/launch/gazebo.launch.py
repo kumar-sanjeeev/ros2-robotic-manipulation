@@ -9,7 +9,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
-    # instantiate the argument for the launch file
+    # declare the argument for the launch file
     model_arg = DeclareLaunchArgument(
         name="model", 
         default_value=os.path.join(get_package_share_directory("mybot_description"), "urdf", "mybot.urdf.xacro"),
@@ -35,7 +35,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory("gazebo_ros"), "launch", "gzserver.launch.py"))
     )
 
-    # start gazebo client: vy inlcuding the another launch file
+    # start gazebo client: by including the another launch file
     start_gazebo_client = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory("gazebo_ros"), "launch", "gzclient.launch.py"))
     )
