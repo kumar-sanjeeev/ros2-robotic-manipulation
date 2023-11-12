@@ -31,13 +31,13 @@ def generate_launch_description():
     )
 
 
-    # start the rviz node to visulaize the robot
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        output="screen",
-        arguments=["-d", os.path.join(get_package_share_directory("mybot_description"), "rviz", "rviz_config.rviz")]
-    )
+    # # start the rviz node to visulaize the robot
+    # rviz_node = Node(
+    #     package="rviz2",
+    #     executable="rviz2",
+    #     output="screen",
+    #     arguments=["-d", os.path.join(get_package_share_directory("mybot_description"), "rviz", "rviz_config.rviz")]
+    # )
 
     # start gazebo server: by include the another launch file
     start_gazebo_server = IncludeLaunchDescription(
@@ -63,5 +63,5 @@ def generate_launch_description():
         start_gazebo_server,
         start_gazebo_client,
         spawn_robot,
-        rviz_node
+        # rviz_node
     ])
