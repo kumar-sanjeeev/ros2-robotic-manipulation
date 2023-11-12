@@ -23,6 +23,8 @@ setup(
             'simple_publisher = pkg_python_examples.simple_publisher:main',
             'simple_subscriber = pkg_python_examples.simple_subscriber:main',
             'simple_parameter = pkg_python_examples.simple_parameters:main',
+            'simple_service_server = pkg_python_examples.service_add_no:main',
+            'simple_service_client = pkg_python_examples.simple_service_client:main'
         ],
     },
 )
