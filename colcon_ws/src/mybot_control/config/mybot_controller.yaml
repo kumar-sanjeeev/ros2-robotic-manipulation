@@ -1,4 +1,4 @@
-# Controller manager configuration
+# Controller manager configuration Node
 controller_manager:
   ros__parameters:
     update_rate: 10 # Hz
@@ -44,6 +44,3 @@ gripper_controller:
     
     open_loop_control: true
     allow_integration_in_goal_trajectories: true
-    
-
-    

@@ -44,3 +44,20 @@ The package Tree structure is as follows:
 - Output video
 
 https://github.com/kumar-sanjeeev/ros2-robotic-manipulation/assets/62834697/480a0131-e719-4309-9f4e-5c19743511da
+
+## Quick Step to Launch Gazebo Simulation
+
+- Build the colcon workspace
+    ```bash
+    # overlay the newly build packages
+    source install/setup.bash
+    ```
+- Launch the Gazebo Simulation
+
+    ```bash
+    ros2 launch mybot_description rviz_display.launch.py
+    ```
+
+- Output video
+
+https://github.com/kumar-sanjeeev/ros2-robotic-manipulation/assets/62834697/c1afee67-e7dc-4d19-8abe-b8089501da24

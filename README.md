@@ -79,5 +79,6 @@ Welcome to the ROS2 Manipulator Arm Workflow repository! This repository showcas
       ```
 
 ## Info about ROS2 pkgs of mybot
-- [x] **ROS2 PKG** : [mybot_description](colcon_ws/src/mybot_description/):: This package provides a comprehensive description of the custom mybot robot.
-
+- [x] **ROS2 PKG** : [mybot_description](colcon_ws/src/mybot_description/):: This package provides a comprehensive description of the custom mybot manipulation robotic arm.
+- [x] **ROS2 PKG** : [mybot_control](colcon_ws/src/mybot_control/):: This package enables the ros2 control for the
+custom mybot manipulation robotic arm.
