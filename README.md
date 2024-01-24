@@ -79,6 +79,9 @@ Welcome to the ROS2 Manipulator Arm Workflow repository! This repository showcas
       ```
 
 ## Info about ROS2 pkgs of mybot
-- [x] **ROS2 PKG** : [mybot_description](colcon_ws/src/mybot_description/):: This package provides a comprehensive description of the custom mybot manipulation robotic arm.
+- [x] **ROS2 PKG** : [mybot_description](colcon_ws/src/mybot_description/):: This package provides a comprehensive description of the custom mybot robotic manipulator arm.
 - [x] **ROS2 PKG** : [mybot_control](colcon_ws/src/mybot_control/):: This package enables the ros2 control for the
-custom mybot manipulation robotic arm.
+custom mybot robotic manipulator arm.
+- [x] **ROS2 PKG** : [mybot_moveit](colcon_ws/src/mybot_moveit/):: This package integrates the moveit framework to move the custom mybot robotic manipulator arm to specified joint positions.
+- [x] **ROS2 PKG** : [mybot_utils](colcon_ws/src/mybot_utils/):: This package provides the various utilies for specific
+operation for e.g. euler angels to quaternion conversion etc.
