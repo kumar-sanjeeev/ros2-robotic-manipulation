@@ -24,7 +24,7 @@ The package Tree structure is as follows:
 - Build the colcon workspace
 
     ```bash
-    # source the ROS (system lvel)
+    # source the ROS (system level)
     source /opt/ros/humble/setup.bash
 
     # cd into colcon_ws
