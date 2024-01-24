@@ -44,9 +44,3 @@ The package Tree structure is as follows:
 - Output video
 
 https://github.com/kumar-sanjeeev/ros2-robotic-manipulation/assets/62834697/480a0131-e719-4309-9f4e-5c19743511da
-
-
-
-
-### Output
-![Video](https://github.com/kumar-sanjeeev/ros2-robotic-manipulation/assets/62834697/480a0131-e719-4309-9f4e-5c19743511da)
